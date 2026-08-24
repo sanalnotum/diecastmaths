@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
@@ -24,6 +23,11 @@
             -webkit-tap-highlight-color: transparent;
         }
 
+        /* UYGULAMA ÇERÇEVESİ (Bilgisayarda bile telefon gibi görünmesini sağlar) */
+        html {
+            background-color: #000; /* Tarayıcı arka planı */
+        }
+
         body {
             background-color: var(--bg-color);
             color: var(--text-main);
@@ -31,6 +35,11 @@
             display: flex;
             flex-direction: column;
             height: 100vh;
+            max-width: 480px; /* Maksimum telefon genişliği */
+            margin: 0 auto; /* Ekranı ortala */
+            border-left: 1px solid #333;
+            border-right: 1px solid #333;
+            position: relative;
         }
 
         header {
@@ -188,13 +197,14 @@
             justify-content: space-between;
         }
 
+        /* GÖRSEL DÜZELTMESİ: Sığdır (Contain) ve yükseklik ayarı */
         .car-image {
             width: 100%;
-            height: 90px;
-            object-fit: cover;
+            height: 110px;
+            object-fit: contain; /* Fotoğrafı kesmeden kutuya sığdırır */
             border-radius: 8px;
             margin-bottom: 10px;
-            background-color: #111;
+            background-color: #000; /* Boşluk kalırsa siyah dolsun */
             border: 1px solid #222;
         }
 
@@ -234,12 +244,14 @@
             color: #555;
         }
 
-        /* Bottom Nav */
+        /* Bottom Nav - Bilgisayarda da ortada kalması için düzeltme */
         .bottom-nav {
             position: fixed;
             bottom: 0;
-            left: 0;
+            left: 50%;
+            transform: translateX(-50%);
             width: 100%;
+            max-width: 480px;
             background-color: var(--surface-color);
             display: flex;
             justify-content: space-around;
@@ -362,26 +374,23 @@
     <div id="toast" class="toast">Harika! +20 KP</div>
 
     <script>
-        // --- DATA (LOCAL STORAGE ENTEGRASYONU) ---
-        // Sayfa yenilendiğinde eski verileri hafızadan çeker. Yoksa 0'dan başlar.
         let kp = parseInt(localStorage.getItem('mathGarageKP')) || 0;
         let garage = JSON.parse(localStorage.getItem('mathGarageCars')) || [];
 
-        // GÖRSELLERİ BURAYA EKLİYORUZ. İnternetteki herhangi bir fotoğrafın linkini buraya yapıştırabilirsiniz.
+        // Hatalı görsel linkleri çok daha stabil görsellerle değiştirildi.
         const marketCars = [
-            { id: 1, brand: "Hot Wheels", name: "Mainline Custom Mustang", price: 150, image: "https://images.unsplash.com/photo-1584345604476-8ec5e12e42dd?auto=format&fit=crop&w=300&q=80" },
-            { id: 2, brand: "Matchbox", name: "Moving Parts Porsche 911", price: 250, image: "https://images.unsplash.com/photo-1503736334956-4c8f8e92946d?auto=format&fit=crop&w=300&q=80" },
-            { id: 3, brand: "Majorette", name: "Premium Edition G-Class", price: 400, image: "https://images.unsplash.com/photo-1520031441872-265e4ff70366?auto=format&fit=crop&w=300&q=80" },
-            { id: 4, brand: "Greenlight", name: "Hollywood Film Aracı", price: 800, image: "https://images.unsplash.com/photo-1517524008697-84bbe3c3fd98?auto=format&fit=crop&w=300&q=80" },
-            { id: 5, brand: "Mini GT", name: "Nissan Skyline GT-R R34", price: 1500, image: "https://images.unsplash.com/photo-1611859266238-4b98091d9d9b?auto=format&fit=crop&w=300&q=80" },
-            { id: 6, brand: "Tomica", name: "Limited Vintage Neo Serisi", price: 2500, image: "https://images.unsplash.com/photo-1557008075-7f2c5efa4cfd?auto=format&fit=crop&w=300&q=80" },
-            { id: 7, brand: "Inno64", name: "Honda Civic Type-R", price: 3500, image: "https://images.unsplash.com/photo-1606016159991-dde62ed726ab?auto=format&fit=crop&w=300&q=80" },
-            { id: 8, brand: "Hot Wheels", name: "Super Treasure Hunt (STH)", price: 5000, image: "https://images.unsplash.com/photo-1596728470535-6b0460c57c43?auto=format&fit=crop&w=300&q=80" }
+            { id: 1, brand: "Hot Wheels", name: "Mainline Custom Mustang", price: 150, image: "https://images.unsplash.com/photo-1584345604476-8ec5e12e42dd?w=300" },
+            { id: 2, brand: "Matchbox", name: "Moving Parts Porsche 911", price: 250, image: "https://images.unsplash.com/photo-1503736334956-4c8f8e92946d?w=300" },
+            { id: 3, brand: "Majorette", name: "Premium Edition G-Class", price: 400, image: "https://images.unsplash.com/photo-1520031441872-265e4ff70366?w=300" },
+            { id: 4, brand: "Greenlight", name: "Hollywood Film Aracı", price: 800, image: "https://images.unsplash.com/photo-1517524008697-84bbe3c3fd98?w=300" },
+            { id: 5, brand: "Mini GT", name: "Nissan Skyline GT-R R34", price: 1500, image: "https://images.unsplash.com/photo-1611859266238-4b98091d9d9b?w=300" },
+            { id: 6, brand: "Tomica", name: "Limited Vintage Neo Serisi", price: 2500, image: "https://images.unsplash.com/photo-1557008075-7f2c5efa4cfd?w=300" },
+            { id: 7, brand: "Inno64", name: "Honda Civic Type-R", price: 3500, image: "https://images.unsplash.com/photo-1583122622582-d6aa5229c996?w=300" },
+            { id: 8, brand: "Hot Wheels", name: "Super Treasure Hunt (STH)", price: 5000, image: "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=300" }
         ];
 
         const brands = ["Hot Wheels", "Matchbox", "Greenlight", "Mini GT", "Corgi", "Jada", "Siku", "Tomica", "Majorette", "Inno64"];
 
-        // --- NAVIGATION ---
         function switchView(viewId, el) {
             document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
@@ -393,7 +402,6 @@
             if(viewId === 'garaj') renderGarage();
         }
 
-        // --- QUESTION ENGINE ---
         let currentCorrectAnswer = 0;
         let currentPoints = 0;
         let answered = false;
@@ -515,11 +523,9 @@
             document.getElementById('next-btn').style.display = 'block';
         }
 
-        // --- CORE LOGIC & STORAGE ---
         function updateKP(amount) {
             kp += amount;
             document.getElementById('score').innerText = kp;
-            // Puanı tarayıcı hafızasına kaydet
             localStorage.setItem('mathGarageKP', kp);
             renderMarket();
         }
@@ -564,7 +570,6 @@
                 updateKP(-car.price);
                 garage.push({...car, buyDate: new Date()});
                 
-                // Garajı tarayıcı hafızasına kaydet
                 localStorage.setItem('mathGarageCars', JSON.stringify(garage));
                 
                 showToast('Garaja Eklendi!', 'var(--primary-color)');
